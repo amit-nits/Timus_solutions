@@ -176,17 +176,22 @@ typedef modular<int> mi;
 typedef pair<mi,mi> pmi;
 typedef vector<mi> vmi;
 typedef vector<pmi> vpmi;
-
+bool cmp(pair<int, int> a , pair<int, int> b){
+	return (a.s < b.s or (a.s==b.s and a.f < b.f)) ? 1 : 0; 
+}
 int main() {
 	ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0); // int test=1; cin>>test; while(test--)
-	int n , k ; re(n,k);
-	ll dp[n+1][2] = {0};
-	dp[1][1] = k-1;
-	dp[1][0] = 0;
-	FOR(i,2,n+1){
-		dp[i][1] = (dp[i-1][0] + dp[i-1][1])*(k-1);
-		dp[i][0] = dp[i-1][1];
+	int n; re(n);
+	vector<pair<int, int>> data;
+	F0R(i,n) {
+		 int ts, te; re(ts,te);
+		 data.emplace_back(ts,te);
 	}
-	ps(dp[n][1]+dp[n][0]);
+	sort(all(data),cmp);
+	// dbg(data);
+	ll ans = 0;
+	ll pc = -1;
+	FOR(i,0,n) if(data[i].f > pc) ans++, pc = data[i].s;
+	cout<<ans<<endl;
 
 }
