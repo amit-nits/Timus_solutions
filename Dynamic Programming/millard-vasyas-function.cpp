@@ -180,6 +180,6 @@ typedef vector<pmi> vpmi;
 int main() {
 	ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0); // int test=1; cin>>test; while(test--)
 	ll n = 1e9;
-	cout<<n<<endl;
+	
 
 }

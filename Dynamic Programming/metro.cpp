@@ -66,6 +66,7 @@ namespace input {
 	template<class T, class... Ts> void re(T& t, Ts&... ts) { 
 		re(t); re(ts...); 
 	}
+
 	template<class T> void re(complex<T>& x) { T a,b; re(a,b); x = cd(a,b); }
 	template<class T1, class T2> void re(pair<T1,T2>& p) { re(p.f,p.s); }
 	template<class T> void re(vector<T>& a) { F0R(i,sz(a)) re(a[i]); }
@@ -73,6 +74,7 @@ namespace input {
 }
 
 using namespace input;
+
 namespace output {
 	void pr(int x) { cout << x; }
 	void pr(long x) { cout << x; }
@@ -172,72 +174,27 @@ template<class T> struct modular {
 	
 	friend modular operator/(modular a, const modular& b) { return a /= b; }
 };
+
 typedef modular<int> mi;
 typedef pair<mi,mi> pmi;
 typedef vector<mi> vmi;
 typedef vector<pmi> vpmi;
-int matrix[100+10][100+10] , temp[100+10] , top , bottom ;
-int kadane(int N)
-{
-    int mx = INT_MIN , S=0 , localTop = 0 ;
-    bool flag = false ;
-    for(int i=0;i<N;i++)
-    {
-        if(temp[i]>=0) flag = true ;
-        S=S+temp[i];
-        if(S<0)
-        {
-            S=0;
-            localTop = i+1 ;
-        }
-        else if(S>mx)
-        {
-            mx = S ;
-            top = localTop ;
-            bottom = i ;
-        }
-    }
-    if(flag) return mx ;
-    mx = INT_MIN;
-    for(int i=0;i<N;i++)
-    {
-        if(mx<temp[i])
-        {
-            mx = temp[i] ;
-            top = bottom = i ;
-        }
-    }
-    return mx ;
-}
-void findMaxSum(int N)
-{
-    int maxSum = INT_MIN , finalTop , finalBottom , finalRight , finalLeft ;
-    for(int left=0;left<N;left++)
-    {
-        fill(temp,temp+101,0);
-        for(int right=left;right<N;right++)
-        {
-            for(int i=0;i<N;i++) temp[i]+=matrix[i][right];
-            int t = kadane(N);
-            if(t>maxSum)
-            {
-                maxSum = t ;
-                finalTop = top ;
-                finalBottom = bottom ;
-                finalLeft = left ;
-                finalRight = right ;
-            }
-        }
-    }
-    // printf("(Top , Left) (%d, %d)\n", finalTop, finalLeft);
-    // printf("(Bottom , Right) (%d, %d)\n", finalBottom, finalRight);
-    printf("%d\n", maxSum);
-}
+
 int main() {
-	ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0); // int test=1; cin>>test; while(test--)
-	int n;
-	cin>>n;
-	F0R(i,n) F0R(j,n) { cin>>matrix[i][j];}
-	findMaxSum(n);
+	//ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0); // int test=1; cin>>test; while(test--)
+	int n,m;
+	re(n,m);
+	vector<vector<double>> dp(n+1,vector<double>(m+1,INF));
+	vector<vector<bool>>mat (n,vector<bool>(m,false));
+	int k; re(k);
+	// cout<<setprecision(14);
+	F0R(i,k) {int x,y;re(x,y);x--,y--;mat[x][y] = true;} 
+	F0R(i,n+1) dp[i][0] = i;
+	F0R(i,m+1) dp[0][i] = i;
+	// dbg(dp);
+	double z = 1.4142;
+	FOR(i,1,n+1) FOR(j,1,m+1) {dp[i][j] = min(dp[i][j-1],dp[i-1][j])+1 ; if(mat[i-1][j-1]) dp[i][j] = min(dp[i-1][j-1]+z,dp[i][j]);}
+	// dbg(dp);
+	cout<<round(dp[n][m]*100)<<endl;
 
 }
