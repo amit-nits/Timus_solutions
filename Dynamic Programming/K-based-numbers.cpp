@@ -180,16 +180,14 @@ typedef vector<pmi> vpmi;
 int main() {
 	ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0); // int test=1; cin>>test; while(test--)
 	int n,a,b; re(n,a,b);
-	mi dp[n+1][a+1][b+1];
-	dp[1][0][0] = 0;
-	dp[1][1][0] = 1;
-	dp[1][0][1] = 1;
-	for (int i = 2; i <= n; ++i)
+	mi dp[n+1][2];
+	dp[0][0] = dp[0][1] = 1;
+	for (int i = 0; i < n; ++i)
 	{
-		mi temp = 0;
-
-		
+		for(int j = 1; j<=a and (i+j)<=n; j++) dp[i+j][0] +=dp[i][1];
+		for(int j = 1; j<=b and (i+j)<=n; j++) dp[i+j][1] +=dp[i][0];
 	}
+	ps(dp[n][0] + dp[n][1]);
 
 
 }
